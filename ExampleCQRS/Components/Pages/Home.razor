@@ -1,2 +1,31 @@
 ﻿@page "/"
+@inject ICategoryService CategoryService
 Sklep internetowy
+
+
+@if (catergories is not null)
+{
+    @foreach (var cat in catergories)
+    {
+        <div style="margin-bottom:20px">
+            <p>@cat.Id</p>
+            <p>@cat.Name</p>
+        </div> 
+    }
+
+}
+
+
+@code {
+
+    CategoryDto[]? catergories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        catergories = await CategoryService.GetCategoriesAsync();
+    }
+
+
+
+}
+
