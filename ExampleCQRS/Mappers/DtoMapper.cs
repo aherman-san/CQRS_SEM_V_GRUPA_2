@@ -11,7 +11,8 @@ namespace ExampleCQRS.Mappers
             {
                 Id = product.Id,
                 Title = product.Title != null ? product.Title : string.Empty,
-                DisplayPrice = $"{product.Price} zł"
+                DisplayPrice = $"{product.Price} zł",
+                Category = product.Category!.Name!
             };
         }
 

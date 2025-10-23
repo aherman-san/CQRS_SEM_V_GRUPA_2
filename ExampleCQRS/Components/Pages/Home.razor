@@ -1,30 +1,57 @@
 ﻿@page "/"
 @inject ICategoryService CategoryService
-Sklep internetowy
+@inject IProductService ProductService
+
+<Header Categories="@catergories" IsLoading="@isLoadingCategories"/>
+<main class="main-content container">
+    <section>
+        <h2 class="section-title">Polecane produkty</h2>
+
+        @if (isLoading)
+        {
+
+        }
 
 
-@if (catergories is not null)
-{
-    @foreach (var cat in catergories)
-    {
-        <div style="margin-bottom:20px">
-            <p>@cat.Id</p>
-            <p>@cat.Name</p>
-        </div> 
-    }
+        @if (products is not null && !isLoading)
+        {
+            @foreach (var product in products)
+            {
+                <div class="product-grid">
+                    <div class="product-card">
+                        <a href="#" aria-label="Laptop UltraBook 14 i5 16GB RAM">
+                            <img src="@product.Image" alt="@product.Title" loading="lazy">
+                        </a>
+                        <div class="card-content">
+                            <h3>@product.Title</h3>
+                            <p class="price">@product.DisplayPrice</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
 
-}
-
+    </section>
+</main>
+<Footer />
 
 @code {
 
+    bool isLoadingCategories;
+    bool isLoading;
     CategoryDto[]? catergories;
+    SimpleProductDto[]? products;
 
     protected override async Task OnInitializedAsync()
     {
+        isLoadingCategories = true;
         catergories = await CategoryService.GetCategoriesAsync();
+        isLoadingCategories = false;
+        isLoading = true;
+        products = await ProductService.GetPromotedProducts();
+        isLoading = false;
+        StateHasChanged();
     }
-
 
 
 }
